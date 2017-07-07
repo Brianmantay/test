@@ -38,13 +38,14 @@
   },
   "variables": {
     "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
-    "nicName": "myVMNic",
+    "nicName": "webAppNic",
+    "nsgName": "webAppNsg",
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet",
     "subnetPrefix": "10.0.0.0/24",
     "publicIPAddressName": "myPublicIP",
-    "vmName": "SimpleWinVM",
-    "virtualNetworkName": "MyVNET",
+    "vmName": "webAppVM",
+    "virtualNetworkName": "webAppVNet",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
   },
   "resources": [
@@ -117,6 +118,70 @@
           }
         ]
       }
+    },
+    {
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "name": "[variables('nsgName')]",
+        "apiVersion": "2017-03-01",
+        "location": "eastus",
+        "scale": null,
+        "properties": {
+            "securityRules": [
+                {
+                    "name": "default-allow-rdp",
+                    "properties": {
+                        "protocol": "Tcp",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "3389",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 1000,
+                        "direction": "Inbound"
+                    }
+                },
+                {
+                    "name": "allow-80",
+                    "properties": {
+                        "protocol": "*",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "80",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 1020,
+                        "direction": "Inbound"
+                    }
+                },
+                {
+                    "name": "allow-443",
+                    "properties": {
+                        "protocol": "*",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "443",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 1030,
+                        "direction": "Inbound"
+                    }
+                },
+                {
+                    "name": "allow-10943",
+                    "properties": {
+                        "protocol": "*",
+                        "sourcePortRange": "*",
+                        "destinationPortRange": "10943",
+                        "sourceAddressPrefix": "*",
+                        "destinationAddressPrefix": "*",
+                        "access": "Allow",
+                        "priority": 1040,
+                        "direction": "Inbound"
+                    }
+                }
+            ]
+        },
+        "dependsOn": []
     },
     {
       "apiVersion": "2016-04-30-preview",
