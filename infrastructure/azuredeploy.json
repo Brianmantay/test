@@ -34,6 +34,70 @@
       "metadata": {
         "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
       }
+    },
+    "tentacleOctopusServerUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "The URL of the Octopus Server with which to register."
+      }
+    },
+    "tentacleApiKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The Api Key to use to register the Tentacle with the Octopus Server."
+      }
+    },
+    "tentacleCommunicationMode": {
+      "defaultValue": "Listen",
+      "allowedValues": [
+        "Listen",
+        "Poll"
+      ],
+      "type": "string",
+      "metadata": {
+        "description": "The type of Tentacle - whether the Tentacle listens for requests from the Octopus Server, or actively polls the Octopus Server for requests."
+      }
+    },
+    "tentaclePort": {
+      "defaultValue": 10933,
+      "minValue": 0,
+      "maxValue": 65535,
+      "type": "int",
+      "metadata": {
+        "description": "The port on which the Tentacle should listen, when CommunicationMode is set to Listen, or the port on which to poll the Octopus Server, when CommunicationMode is set to Poll. By default, Tentacle's listen on 10933 and polls the Octopus Server on 10943."
+      }
+    },
+    "tentacleRoles": {
+      "type": "string",
+      "metadata": {
+        "description": "A comma delimited list of Roles to apply to the Tentacle."
+      }
+    },
+    "tentacleEnvironments": {
+      "type": "string",
+      "metadata": {
+        "description": "A comma delimited list of Environments in which the Tentacle should be placed."
+      }
+    },
+    "tentaclePublicHostNameConfiguration": {
+      "defaultValue": "PublicIP",
+      "allowedValues": [
+        "PublicIP",
+        "FQDN",
+        "ComputerName",
+        "Custom"
+      ],
+      "type": "string",
+      "metadata": {
+        "description": "How the Octopus Server should contact the Tentacle. Only required when CommunicationMode is 'Listen'."
+      }
+    },
+    "tentacleCustomPublicHostName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The custom public host name that the Octopus Server should use to contact the Tentacle. Only required when communicationMode is 'Listen' and publicHostNameConfiguration is 'Custom'."
+      }
     }
   },
   "variables": {
@@ -252,6 +316,33 @@
             "https://raw.githubusercontent.com/Brianmantay/test-app/master/infrastructure/setup.ps1"
           ],
           "commandToExecute": "setup.ps1"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(variables('vmName'),'/OctopusDeployWindowsTentacle')]",
+      "apiVersion": "2016-03-30",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "OctopusDeploy.Tentacle",
+        "type": "OctopusDeployWindowsTentacle",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": "true",
+        "settings": {
+          "OctopusServerUrl": "[parameters('tentacleOctopusServerUrl')]",
+          "Environments": "[split(parameters('tentacleEnvironments'), ',')]",
+          "Roles": "[split(parameters('tentacleRoles'), ',')]",
+          "CommunicationMode": "[parameters('tentacleCommunicationMode')]",
+          "Port": "[parameters('tentaclePort')]",
+          "PublicHostNameConfiguration": "[parameters('tentaclePublicHostNameConfiguration')]",
+          "CustomPublicHostName": "[parameters('tentacleCustomPublicHostName')]"
+        },
+        "protectedSettings": {
+          "ApiKey": "[parameters('tentacleApiKey')]"
         }
       }
     }

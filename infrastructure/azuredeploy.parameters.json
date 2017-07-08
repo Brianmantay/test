@@ -11,10 +11,39 @@
         "id": "/subscriptions/a57e3a7f-61b6-4fa1-8efd-f3c63e13ffbd/resourceGroups/keyvault/providers/Microsoft.KeyVault/vaults/keyvault-bmantay"
         },
         "secretName": "adminPassword"
-    }
+      }
     },
     "dnsLabelPrefix": {
       "value": "testapp-bmantay"
+    },
+    "tentacleOctopusServerUrl": {
+      "value": "http://octopus-bmantay.eastus.cloudapp.azure.com"
+    },
+    "tentacleApiKey": {
+      "reference": {
+        "keyVault": { 
+        "id": "/subscriptions/a57e3a7f-61b6-4fa1-8efd-f3c63e13ffbd/resourceGroups/keyvault/providers/Microsoft.KeyVault/vaults/keyvault-bmantay"
+        },
+        "secretName": "tentacleApiKey"
+      }
+    },
+    "tentacleCommunicationMode": {
+      "value": "Listen"
+    },
+    "tentaclePort": {
+      "value": 10943
+    },
+    "tentacleRoles": {
+      "value": "testapp"
+    },
+    "tentacleEnvironments": {
+      "value": "dev"
+    },
+    "tentaclePublicHostNameConfiguration": {
+      "value": "PublicIP"
+    },
+    "tentacleCustomPublicHostName": {
+      "value": ""
     }
   }
 }
