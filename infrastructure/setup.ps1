@@ -1,6 +1,6 @@
 # Firewall
 netsh advfirewall firewall add rule name="allow-in-80" dir=in action=allow protocol=TCP localport=80
-netsh advfirewall firewall add rule name="allow-in-80" dir=in action=allow protocol=TCP localport=10943
+netsh advfirewall firewall add rule name="allow-in-10943" dir=in action=allow protocol=TCP localport=10943
 
 # Folders
 New-Item -ItemType Directory c:\temp

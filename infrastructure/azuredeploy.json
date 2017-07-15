@@ -22,7 +22,7 @@
     },
     "windowsOSVersion": {
       "type": "string",
-      "defaultValue": "2008-R2-SP1",
+      "defaultValue": "2016-Datacenter",
       "allowedValues": [
         "2008-R2-SP1",
         "2012-Datacenter",
@@ -107,7 +107,7 @@
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet",
     "subnetPrefix": "10.0.0.0/24",
-    "publicIPAddressName": "myPublicIP",
+    "publicIPAddressName": "webAppPublicIP",
     "vmName": "webAppVM",
     "virtualNetworkName": "webAppVNet",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
@@ -315,7 +315,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/Brianmantay/test-app/master/infrastructure/setup.ps1"
           ],
-          "commandToExecute": "setup.ps1"
+          "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted .\\setup.ps1"
         }
       }
     },
