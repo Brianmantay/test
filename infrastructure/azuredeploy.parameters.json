@@ -34,7 +34,7 @@
       "value": 10943
     },
     "tentacleRoles": {
-      "value": "dev"
+      "value": "api"
     },
     "tentacleEnvironments": {
       "value": "dev"
